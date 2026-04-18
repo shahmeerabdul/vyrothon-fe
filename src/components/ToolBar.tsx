@@ -19,6 +19,7 @@ interface Props {
   canExecute: boolean;
   liveMode: boolean;
   onLiveModeChange: (v: boolean) => void;
+  selectedPresetId: string;
   onLoadPreset: (id: string) => void;
   onExport: () => void;
   onImport: (json: string) => void;
@@ -32,6 +33,7 @@ export function ToolBar({
   canExecute,
   liveMode,
   onLiveModeChange,
+  selectedPresetId,
   onLoadPreset,
   onExport,
   onImport,
@@ -104,15 +106,14 @@ export function ToolBar({
       <div className="flex items-center gap-2">
         <Wand2 className="w-4 h-4 text-slate-400" />
         <select
+          value={selectedPresetId}
           onChange={(e) => {
             if (e.target.value) onLoadPreset(e.target.value);
-            e.target.value = "";
           }}
-          defaultValue=""
-          className="bg-ink-950/80 border border-white/10 rounded-lg text-xs text-slate-200 px-2 py-1.5 focus:outline-none focus:ring-2 focus:ring-cyan-400/40"
+          className="bg-ink-950/80 border border-white/10 rounded-lg text-xs text-slate-200 px-2 py-1.5 focus:outline-none focus:ring-2 focus:ring-cyan-400/40 max-w-[260px]"
         >
-          <option value="" disabled>
-            Load preset…
+          <option value="">
+            {selectedPresetId ? "Custom / modified" : "Load preset…"}
           </option>
           {PRESETS.map((p) => (
             <option key={p.id} value={p.id}>

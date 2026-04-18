@@ -40,6 +40,9 @@ export default function App() {
   });
   const [nodes, setNodes] = useState<CipherNode[]>(() => makeDefaultNodes());
   const [liveMode, setLiveMode] = useState<boolean>(true);
+  const [selectedPresetId, setSelectedPresetId] = useState<string>(
+    PRESETS[0].id
+  );
   const [roundTripResult, setRoundTripResult] = useState<{
     ok: boolean;
     encrypted: string;
@@ -74,6 +77,9 @@ export default function App() {
     return () => window.removeEventListener("keydown", onKey);
   }, [execute]);
 
+  // Any mutation to the pipeline should mark it as "custom" (no preset).
+  const markCustom = () => setSelectedPresetId("");
+
   const addNode = (type: CipherType) => {
     const cipher = CIPHERS[type];
     const fresh: CipherNode = {
@@ -82,10 +88,13 @@ export default function App() {
       config: { ...cipher.defaultConfig },
     };
     setNodes((prev) => [...prev, fresh]);
+    markCustom();
   };
 
-  const removeNode = (id: string) =>
+  const removeNode = (id: string) => {
     setNodes((prev) => prev.filter((n) => n.id !== id));
+    markCustom();
+  };
 
   const moveNode = (id: string, dir: -1 | 1) => {
     setNodes((prev) => {
@@ -97,6 +106,7 @@ export default function App() {
       [next[idx], next[target]] = [next[target], next[idx]];
       return next;
     });
+    markCustom();
   };
 
   const updateConfig = (id: string, key: string, value: string | number) => {
@@ -105,6 +115,7 @@ export default function App() {
         n.id === id ? { ...n, config: { ...n.config, [key]: value } } : n
       )
     );
+    markCustom();
   };
 
   const loadPreset = (presetId: string) => {
@@ -115,6 +126,7 @@ export default function App() {
     setResults({ encrypt: null, decrypt: null });
     setMode("encrypt");
     setRoundTripResult(null);
+    setSelectedPresetId(p.id);
   };
 
   const exportPipeline = () => {
@@ -168,6 +180,7 @@ export default function App() {
       });
       setResults({ encrypt: null, decrypt: null });
       setMode(importedMode);
+      setSelectedPresetId("");
     } catch (err) {
       const msg = err instanceof Error ? err.message : String(err);
       alert(`Import failed: ${msg}`);
@@ -300,6 +313,7 @@ export default function App() {
             canExecute={canExecute}
             liveMode={liveMode}
             onLiveModeChange={setLiveMode}
+            selectedPresetId={selectedPresetId}
             onLoadPreset={loadPreset}
             onExport={exportPipeline}
             onImport={importPipeline}
