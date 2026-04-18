@@ -50,7 +50,7 @@ export function ToolBar({
   };
 
   return (
-    <div className="rounded-2xl border border-white/10 bg-ink-900/70 backdrop-blur p-3 flex flex-wrap items-center gap-3">
+    <div className="rounded-2xl border border-white/10 bg-ink-900/70 backdrop-blur p-3 flex flex-wrap items-center gap-x-2 gap-y-2">
       <div className="inline-flex rounded-xl border border-white/10 overflow-hidden">
         <button
           onClick={() => onModeChange("encrypt")}
@@ -103,21 +103,25 @@ export function ToolBar({
 
       <div className="h-6 w-px bg-white/10" />
 
-      <div className="flex items-center gap-2">
+      <div className="flex items-center gap-1.5">
         <Wand2 className="w-4 h-4 text-slate-400" />
         <select
           value={selectedPresetId}
           onChange={(e) => {
             if (e.target.value) onLoadPreset(e.target.value);
           }}
-          className="bg-ink-950/80 border border-white/10 rounded-lg text-xs text-slate-200 px-2 py-1.5 focus:outline-none focus:ring-2 focus:ring-cyan-400/40 max-w-[260px]"
+          title={
+            PRESETS.find((p) => p.id === selectedPresetId)?.description ??
+            "Choose a preset pipeline"
+          }
+          className="bg-ink-950/80 border border-white/10 rounded-lg text-xs text-slate-200 px-2 py-1.5 focus:outline-none focus:ring-2 focus:ring-cyan-400/40 w-[150px]"
         >
           <option value="">
             {selectedPresetId ? "Custom / modified" : "Load preset…"}
           </option>
           {PRESETS.map((p) => (
-            <option key={p.id} value={p.id}>
-              {p.name} — {p.description}
+            <option key={p.id} value={p.id} title={p.description}>
+              {p.name}
             </option>
           ))}
         </select>
