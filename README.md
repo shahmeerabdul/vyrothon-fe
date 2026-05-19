@@ -9,7 +9,7 @@ Built for Vyrothon in a single session. No external cipher libraries — every a
 ## Features
 
 - **5 cipher algorithms** (4 configurable + 1 zero-config):
-  - Caesar cipher (`shift` ∈ [-25, 25])
+  - Caesar cipher (`shift` ∈ [-25, 25]) 
   - XOR cipher (arbitrary UTF-8 key, output Base64-encoded)
   - Vigenère cipher (alphabetic keyword)
   - Rail Fence cipher (2..32 rails)
@@ -116,12 +116,6 @@ scripts/
 - **Per-cipher accent colors** make it trivial to eyeball pipeline structure at a glance.
 - **Intermediate panel renders in visual (top→bottom) order regardless of mode** — when decrypting, it still reads top→bottom on screen, even though execution runs bottom→top, so users see the exact per-stage transformation alignment.
 
-## Deployment
-
-```bash
-npm run build
-npx vercel --prod     # or drag dist/ to netlify.app/drop
-```
 
 ## License
 
